@@ -19,8 +19,8 @@
 
 body {
     font-family: 'Montserrat', sans-serif;
-    line-height: 1.6;
-    min-height: 100vh;
+    line-height: 2;
+    min-height: auto;
     background-color: #f5f5f5;
 }
 
@@ -52,7 +52,7 @@ body {
 }
 
 .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(29, 0, 160, 0.1);
 }
 
 .welcome-msg {
@@ -79,11 +79,12 @@ body {
     border-radius: var(--spacing-l);
     overflow: hidden;
     text-decoration: none;
-    transition: transform 0.3s;
+    transition: transform 0.5s;
 }
 
 .card:hover {
-    transform: translateY(7px);
+    transform-style: inherit;
+    transform: matrix() ;
 }
 
 .card__background {
@@ -92,7 +93,7 @@ body {
     height: 100%;
     background-size: cover;
     background-position: center;
-    transition: transform 0.1s;
+    transition: transform 0.5s;
 }
 
 .card__content {
@@ -230,4 +231,94 @@ body {
 
 .login-container button:hover {
     background-color: #0056b3; 
+}
+
+.question {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+.options-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.option {
+    flex: 1 1 calc(25% - 10px);
+    min-width: 150px;
+    padding: 8px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.option:hover {
+    background-color: #f5f5f5;
+}
+
+.progress-container {
+    max-width: var(--width-container);
+    margin: 0 auto;
+}
+
+.progress-container h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary-color);
+}
+
+.language-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.language-stats-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.language-stats-card h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.stats-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.chart-container {
+    position: relative;
+    height: 200px;
+    width: 100%;
+}
+
+.stats-summary {
+    display: grid;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.text-center {
+    text-align: center;
+    position: relative;
+    display: flex;
+    padding-top: 30%;
+
+}
+
+.mb-8 {
+    margin-bottom: 2rem;
 }
