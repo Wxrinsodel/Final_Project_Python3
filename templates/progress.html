@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Progress</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+        </div>
+    </nav>
+
+    <div class="progress-container">
+        <h1>Your Learning Progress</h1>
+        
+        <div class="stats-container">
+            {% for language, stat in stats.items() %}
+            <div class="language-stats">
+                <h2>{{ language }}</h2>
+                <p>Attempts: {{ stat.attempts }}</p>
+                <p>Average Score: {{ "%.1f"|format(stat.average_score) }}%</p>
+                <p>Highest Score: {{ stat.highest_score }}%</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="history-container">
+            <h2>Recent Quizzes</h2>
+            <div class="quiz-history">
+                {% for score in scores %}
+                <div class="score-entry">
+                    <span class="language">{{ score.language }}</span>
+                    <span class="score">{{ score.score }}%</span>
+                    <span class="date">{{ score.date.strftime('%Y-%m-%d %H:%M') }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

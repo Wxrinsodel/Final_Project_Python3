@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Learning Hub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <span class="welcome-msg">Welcome, {{ session['username'] }}!</span>
+            <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+            <a href="{{ url_for('progress') }}" class="nav-link">My Progress</a>
+        </div>
+    </nav>
+
+    <div class="Section">
+        <div class="card-grid">
+            {% set background_images = {
+                'English': 'England.jpg',
+                'French': 'France.jpg',
+                'German': 'Germany.jpg',
+                'Italian': 'Italy.jpg',
+                'Japanese': 'Japan.jpg',
+                'Chinese': 'China.jpg',
+                'Korean': 'Korea.jpg',
+                'Thai': 'Thailand.jpg'
+            } %}
+            {% for language in background_images.keys() %}
+            <a class="card" href="{{ url_for('quiz', language=language) }}">
+                <div class="card__background" 
+                    style="background-image: {% if background_images[language] %}url('{{ url_for('static', filename='images/' + background_images[language]) }}'){% else %}none{% endif %};">
+                </div>
+
+                <div class="card__content">
+                    <p class="card__category">Language</p>
+                    <h3 class="card__heading">{{ language }}</h3>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
