@@ -73,11 +73,16 @@ def progress():
     languages = {}
     for score in scores:
         if score.language not in languages:
+            all_scores = Score.query.filter_by(
+                user_id=user.id, 
+                language=score.language
+            ).order_by(Score.score.desc()).all()
+            
             languages[score.language] = {
                 'scores': [],
                 'dates': [],
-                'total_questions': len(json.loads(score.correct_answers)),
-                'correct_answers': [],
+                'highest_score': all_scores[0].score if all_scores else 0,
+                'latest_score': all_scores[-1].score if all_scores else 0,
                 'attempts': 0,
                 'average_score': 0
             }
@@ -85,16 +90,9 @@ def progress():
         languages[score.language]['scores'].append(score.score)
         languages[score.language]['dates'].append(score.date.strftime('%Y-%m-%d'))
         languages[score.language]['attempts'] += 1
-        languages[score.language]['correct_answers'].append(
-            sum(1 for a, c in zip(
-                json.loads(score.answers), 
-                json.loads(score.correct_answers)
-            ) if a == c)
-        )
         languages[score.language]['average_score'] = sum(languages[score.language]['scores']) / len(languages[score.language]['scores'])
 
     return render_template('progress.html', 
-                         scores=scores, 
                          languages=languages)
 
 @app.route('/')
@@ -124,7 +122,7 @@ def logout():
 @app.route('/language/<lang>')
 def language_page(lang):
     background_images = {
-        'English': 'England.jpg',
+        'Spanish': 'Spain.jpg',
         'Chinese': 'China.jpg',
         'French': 'France.jpg', 
         'German': 'Germany.jpg',
@@ -143,4 +141,4 @@ def language_page(lang):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(debug=True)
+    app.run(debug=True, host='127.0.0.1', port=1234)

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Learning Progress</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -16,29 +17,45 @@
     <div class="progress-container">
         <h1>Your Learning Progress</h1>
         
-        <div class="stats-container">
-            {% for language, stat in stats.items() %}
-            <div class="language-stats">
-                <h2>{{ language }}</h2>
-                <p>Attempts: {{ stat.attempts }}</p>
-                <p>Average Score: {{ "%.1f"|format(stat.average_score) }}%</p>
-                <p>Highest Score: {{ stat.highest_score }}%</p>
+        {% for language, data in languages.items() %}
+        <div class="language-stats">
+            <h2>{{ language }}</h2>
+            <div class="stats-grid">
+                <div class="chart-container">
+                    <canvas id="scoreChart{{ loop.index }}"></canvas>
+                </div>
+                <div class="stats-summary">
+                    <p>Total Attempts: {{ data.attempts }}</p>
+                    <p>Average Score: {{ "%.1f"|format(data.average_score) }}%</p>
+                    <p>Latest Score: {{ "%.1f"|format(data.scores[0]) }}%</p>
+                </div>
             </div>
-            {% endfor %}
         </div>
 
-        <div class="history-container">
-            <h2>Recent Quizzes</h2>
-            <div class="quiz-history">
-                {% for score in scores %}
-                <div class="score-entry">
-                    <span class="language">{{ score.language }}</span>
-                    <span class="score">{{ score.score }}%</span>
-                    <span class="date">{{ score.date.strftime('%Y-%m-%d %H:%M') }}</span>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
+        <script>
+            const scoreChart = new Chart(document.getElementById(`scoreChart${loopIndex}`), {
+                type: 'line',
+            data: {
+                labels: JSON.parse('{{ data.dates|tojson|safe }}'),
+                datasets: [{
+                label: 'Score History',
+                data: JSON.parse('{{ data.scores|tojson|safe }}'),
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+                options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100
+            }
+        }
+    }
+});
+        </script>
+        {% endfor %}
     </div>
 </body>
 </html>

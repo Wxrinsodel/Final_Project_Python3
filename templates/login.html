@@ -18,5 +18,19 @@
             </form>
         </div>
     </div>
+    <script>
+        // Get the username input field
+        const usernameInput = document.getElementById('username');
+        
+        // Load saved username if it exists
+        if (localStorage.getItem('savedUsername')) {
+            usernameInput.value = localStorage.getItem('savedUsername');
+        }
+        
+        // Save username when form is submitted
+        document.querySelector('form').addEventListener('submit', function() {
+            localStorage.setItem('savedUsername', usernameInput.value);
+        });
+    </script>
 </body>
 </html>
