@@ -15,47 +15,55 @@
     </nav>
 
     <div class="progress-container">
-        <h1>Your Learning Progress</h1>
+        <h1 class="text-center mb-8">Your Learning Progress</h1>
         
-        {% for language, data in languages.items() %}
-        <div class="language-stats">
-            <h2>{{ language }}</h2>
-            <div class="stats-grid">
-                <div class="chart-container">
-                    <canvas id="scoreChart{{ loop.index }}"></canvas>
-                </div>
-                <div class="stats-summary">
-                    <p>Total Attempts: {{ data.attempts }}</p>
-                    <p>Average Score: {{ "%.1f"|format(data.average_score) }}%</p>
-                    <p>Latest Score: {{ "%.1f"|format(data.scores[0]) }}%</p>
+        <div class="language-stats-grid">
+            {% for language, data in languages.items() %}
+            <div class="language-stats-card">
+                <h2>{{ language }}</h2>
+                <div class="stats-grid">
+                    <div class="chart-container">
+                        <canvas id="scoreChart{{ loop.index }}"></canvas>
+                    </div>
+                    <div class="stats-summary">
+                        <p>Total Attempts: {{ data.attempts }}</p>
+                        <p>Average Score: {{ "%.1f"|format(data.average_score) }}%</p>
+                        <p>Highest Score: {{ "%.1f"|format(data.highest_score) }}%</p>
+                        <p>Latest Score: {{ "%.1f"|format(data.latest_score) }}%</p>
+                    </div>
                 </div>
             </div>
+            
+            <script>
+                const ctx{{ loop.index }} = document.getElementById(`scoreChart{{ loop.index }}`).getContext('2d');
+                new Chart(ctx{{ loop.index }}, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Highest Score', 'Latest Score'],
+                        datasets: [{
+                            label: 'Score Comparison',
+                            data: [{{ data.highest_score }}, {{ data.latest_score }}],
+                            backgroundColor: [
+                                'rgba(75, 192, 192, 0.6)',
+                                'rgba(153, 102, 255, 0.6)'
+                            ],
+                            borderColor: [
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            </script>
+            {% endfor %}
         </div>
-
-        <script>
-            const scoreChart = new Chart(document.getElementById(`scoreChart${loopIndex}`), {
-                type: 'line',
-            data: {
-                labels: JSON.parse('{{ data.dates|tojson|safe }}'),
-                datasets: [{
-                label: 'Score History',
-                data: JSON.parse('{{ data.scores|tojson|safe }}'),
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            }]
-        },
-                options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 100
-            }
-        }
-    }
-});
-        </script>
-        {% endfor %}
     </div>
-</body>
-</html>
