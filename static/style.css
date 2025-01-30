@@ -24,6 +24,8 @@ body {
     background-color: #f5f5f5;
 }
 
+/*index.html*/
+
 .navbar {
     background-color: var(--primary-color);
     padding: 1rem;
@@ -52,7 +54,7 @@ body {
 }
 
 .nav-link:hover {
-    background-color: rgba(29, 0, 160, 0.1);
+    background-color: rgba(183, 167, 255, 0.1);
 }
 
 .welcome-msg {
@@ -83,8 +85,7 @@ body {
 }
 
 .card:hover {
-    transform-style: inherit;
-    transform: matrix() ;
+    transform: scale(1.1) translateZ(0)  ;
 }
 
 .card__background {
@@ -124,12 +125,13 @@ body {
 }
 
 .quiz-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
+    max-width: auto ;
+    margin: 3rem;
+    padding: 3rem;
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
 }
 
 .difficulty-selector {
@@ -233,10 +235,40 @@ body {
     background-color: #0056b3; 
 }
 
+.username-suggestions {
+    position: relative;
+    width: 100%;
+}
+.suggestions-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    max-height: 150px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* Quiz.HTML */
 .question {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
+    margin-top: 2rem;
     padding: 1rem;
-    border: 1px solid #eee;
+    border: 1px solid #eee2e2;
     border-radius: 4px;
 }
 
@@ -258,9 +290,11 @@ body {
 }
 
 .option:hover {
-    background-color: #f5f5f5;
+    background-color: #ffffff;
 }
 
+
+/* progree.HTML */
 .progress-container {
     max-width: var(--width-container);
     margin: 0 auto;
@@ -306,9 +340,9 @@ body {
 .stats-summary {
     display: grid;
     gap: 0.5rem;
-    padding: 1rem;
+    padding: 2rem;
     background: #f8f9fa;
-    border-radius: 4px;
+    border-radius: 5px;
 }
 
 .text-center {

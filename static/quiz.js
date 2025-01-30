@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Language content database
     const languageContent = {
         'French': {
+            script: 'Français',
             words: {
                 'bonjour': 'hello',
                 'merci': 'thank you',
@@ -17,11 +18,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 'pain': 'bread',
                 'livre': 'book',
                 'table': 'table',
+
                 'un': 'one',
                 'deux': 'two',
                 'trois': 'three',
                 'quatre': 'four',
-                'cinq': 'five'
+                'cinq': 'five',
+                'six': 'six',
+                'sept': 'seven',
+                'huit': 'eight',
+                'neuf': 'nine',
+                'dix': 'ten'
             }
         },
             'Japanese': {
@@ -36,9 +43,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     'mizu': 'water',
                     'pan': 'bread',
                     'hon': 'book',
-                    'teburu': 'table'
-                },
-                numbers: {
+                    'teburu': 'table',
+
                     'ichi': 'one',
                     'ni': 'two',
                     'san': 'three',
@@ -49,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'hachi': 'eight',
                     'kyuu': 'nine',
                     'juu': 'ten'
-                }
+                },
             },
             'German': {
                 script: 'Deutsch',
@@ -63,9 +69,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     'wasser': 'water',
                     'brot': 'bread',
                     'buch': 'book',
-                    'tisch': 'table'
-                },
-                numbers: {
+                    'tisch': 'table',
+
                     'eins': 'one',
                     'zwei': 'two',
                     'drei': 'three',
@@ -76,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'acht': 'eight',
                     'neun': 'nine',
                     'zehn': 'ten'
-                }
+                },
             },
             'Italian': {
                 script: 'Italiano',
@@ -90,9 +95,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     'acqua': 'water',
                     'pane': 'bread',
                     'libro': 'book',
-                    'tavolo': 'table'
-                },
-                numbers: {
+                    'tavolo': 'table',
+
                     'uno': 'one',
                     'due': 'two',
                     'tre': 'three',
@@ -103,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'otto': 'eight',
                     'nove': 'nine',
                     'dieci': 'ten'
-                }
+                },
             },
             'Chinese': {
                 script: '中文',
@@ -117,9 +121,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     'shuǐ': 'water',
                     'miànbāo': 'bread',
                     'shū': 'book',
-                    'zhuōzi': 'table'
-                },
-                numbers: {
+                    'zhuōzi': 'table',
+
                     'yī': 'one',
                     'èr': 'two',
                     'sān': 'three',
@@ -130,26 +133,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     'bā': 'eight',
                     'jiǔ': 'nine',
                     'shí': 'ten'
-                }
+                },
+
             },
             'Thai': {
                 script: 'ภาษาไทย', 
                 words: {
-                    'sàwàtdee': 'hello',
-                    'khòp khun': 'thank you',
-                    'laa kòn': 'goodbye',
-                    'maeo': 'cat',
-                    'sùnák': 'dog',
-                    'bâan': 'house',
-                    'náam': 'water',
-                    'khànom pang': 'bread',
-                    'nangsʉ̌ʉ': 'book',
-                    'tóh': 'table'
-                },
-                numbers: {
-                    'nùeng': 'one',
-                    'sɔ̌ng': 'two',
-                    'sǎam': 'three',
+                    'sàwàtdee (สวัสดี)': 'hello',
+                    'khòp khun (ขอบคุณ)': 'thank you',
+                    'laa kòn (ลาก่อน)': 'goodbye',
+                    'maeo (แมว)': 'cat',
+                    'sùnák(สุนัข)': 'dog',
+                    'bâan (บ้าน)': 'house',
+                    'náam (น้ำ)': 'water',
+                    'khànom pang (ขนมปัง)': 'bread',
+                    'nangsʉ̌ʉ (หนังสือ)': 'book',
+                    'tóh (โต๊ะ)': 'table',
+
+                    'nùeng (หนึ่ง)': 'one',
+                    'sɔ̌ng (สอง)': 'two',
+                    'sǎam (สาม)': 'three',
                     'sìi': 'four',
                     'hâa': 'five',
                     'hòk': 'six',
@@ -157,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'pɛ̀et': 'eight',
                     'kâao': 'nine',
                     'sìp': 'ten'
-                }
+                },
             },
             'Korean': {
                 script: '한국어',
@@ -171,9 +174,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     'mul': 'water',
                     'ppang': 'bread',
                     'chaek': 'book',
-                    'teibeul': 'table'
-                },
-                numbers: {
+                    'teibeul': 'table',
+
                     'hana': 'one',
                     'dul': 'two',
                     'set': 'three',
@@ -184,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'yeodeolp': 'eight',
                     'ahop': 'nine',
                     'yeol': 'ten'
-                }
+                },
             },
             'Spanish': {
                 words: {
@@ -198,30 +200,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 'pan': 'bread',
                 'libro': 'book',
                 'mesa': 'table',
-                'me llamo [name]': 'My name is [name]' //Sentence
+
+                'uno': 'one',
+                'dos': 'two',
+                'tres': 'three',
+                'cuatro': 'four',
+                'cinco': 'five',
+                'seis': 'six',
+                'siete': 'seven',
+                'ocho': 'eight',
+                'nueve': 'nine',
+                'diez': 'ten',
+               
             },
-                numbers: {
-                    'uno': 'one',
-                    'dos': 'two',
-                    'tres': 'three',
-                    'cuatro': 'four',
-                    'cinco': 'five',
-                    'seis': 'six',
-                    'siete': 'seven',
-                    'ocho': 'eight',
-                    'nueve': 'nine',
-                    'diez': 'ten'
-                }
             }
         };
         
-        
-        const language = document.querySelector('h1').textContent.split(' ')[0];
-        if (languageContent[language] && languageContent[language].script) {
-            console.log(languageContent[language].script);
-        } else {
-            console.log("Script not found for this language.");
-        }
     
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
@@ -231,69 +225,33 @@ document.addEventListener('DOMContentLoaded', function() {
             return array;
         }
     
-        function generateVocabQuestion(language, word, correctMeaning, allMeanings) {
-            const options = shuffleArray([...new Set([correctMeaning, ...shuffleArray(allMeanings).slice(0, 3)])]).slice(0, 4);
-            const correctIndex = options.indexOf(correctMeaning);
-            const correctLetter = String.fromCharCode(65 + correctIndex);
-    
-            return {
-                question: `What does '${word}' mean in ${language}?`,
-                options: options.map((opt, i) => `${String.fromCharCode(65 + i)}) ${opt}`),
-                correct: correctLetter
-            };
-        }
-    
-        // Updated generateQuiz function as per your adjustment
-        function generateQuiz(language, difficulty) {
+        function generateQuiz(language) {
             const langContent = languageContent[language];
             if (!langContent) return null;
-            const questions = [];
             
-            switch(difficulty) {
-                case 'beginner':
-                    if (langContent.numbers) {
-                        const numberEntries = Object.entries(langContent.numbers);
-                        const allNumbers = Object.values(langContent.numbers);
-                        const selectedNumbers = shuffleArray(numberEntries).slice(0, 10);
-                        selectedNumbers.forEach(([word, meaning]) => {
-                            questions.push({
-                                question: `What is "${word}" in ${language}?`,
-                                options: shuffleArray([meaning, ...shuffleArray(allNumbers.filter(n => n !== meaning)).slice(0, 3)]).map((opt, i) => 
-                                    `${String.fromCharCode(65 + i)}) ${opt}`),
-                                correct: String.fromCharCode(65 + shuffleArray([meaning, ...shuffleArray(allNumbers.filter(n => n !== meaning)).slice(0, 3)]).indexOf(meaning))
-                            });
-                        });
-                    }
-                    break;
-                    
-                case 'intermediate':
-                    const vocabEntries = Object.entries(langContent.words);
-                    const allMeanings = Object.values(langContent.words);
-                    const selectedVocab = shuffleArray(vocabEntries).slice(0, 8);
-                    selectedVocab.forEach(([word, meaning]) => {
-                        questions.push(generateVocabQuestion(language, word, meaning, allMeanings));
-                    });
-                    break;
-                    
-                case 'advanced':
-                    if (langContent.phrases) {
-                        const phraseEntries = Object.entries(langContent.phrases);
-                        const allPhrases = Object.values(langContent.phrases);
-                        const selectedPhrases = shuffleArray(phraseEntries).slice(0, 10);
-                        selectedPhrases.forEach(([phrase, meaning]) => {
-                            questions.push({
-                                question: `What does "${phrase}" mean?`,
-                                options: shuffleArray([meaning, ...shuffleArray(allPhrases.filter(p => p !== meaning)).slice(0, 3)]).map((opt, i) => 
-                                    `${String.fromCharCode(65 + i)}) ${opt}`),
-                                correct: String.fromCharCode(65 + shuffleArray([meaning, ...shuffleArray(allPhrases.filter(p => p !== meaning)).slice(0, 3)]).indexOf(meaning))
-                            });
-                        });
-                    }
-                    break;
-                    
-                default:
-                    return generateQuiz(language, 'beginner');
-            }
+            const questions = [];
+            const vocabEntries = Object.entries(langContent.words);
+            const allMeanings = Object.values(langContent.words);
+            
+            // Select 10 random words for the quiz
+            const selectedVocab = shuffleArray(vocabEntries).slice(0, 10);
+            
+            selectedVocab.forEach(([word, meaning]) => {
+                const options = shuffleArray([
+                    meaning,
+                    ...shuffleArray(allMeanings.filter(m => m !== meaning)).slice(0, 3)
+                ]);
+                
+                const correctIndex = options.indexOf(meaning);
+                const correctLetter = String.fromCharCode(65 + correctIndex);
+    
+                questions.push({
+                    question: `What does '${word}' mean in ${language}?`,
+                    options: options.map((opt, i) => `${String.fromCharCode(65 + i)}) ${opt}`),
+                    correct: correctLetter
+                });
+            });
+            
             return questions;
         }
     
@@ -351,9 +309,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     
-        // Initialize quiz with difficulty
-        const difficulty = document.getElementById('difficulty').value;
-        const questions = generateQuiz(language, difficulty);
+        // Initialize quiz
+        const language = document.querySelector('h1').textContent.split(' ')[0];
+        const questions = generateQuiz(language);
         if (questions) {
             displayQuiz(questions);
         }
