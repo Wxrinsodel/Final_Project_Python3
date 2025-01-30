@@ -104,14 +104,15 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
-        user = User.query.filter_by(username=username).first()
-        if not user:
-            user = User(username=username)
-            db.session.add(user)
-            db.session.commit()
-        session['username'] = username
-        return redirect(url_for('index'))
+        username = request.form['username'].strip()
+        if username:  # Make sure username isn't empty
+            user = User.query.filter_by(username=username).first()
+            if not user:
+                user = User(username=username)
+                db.session.add(user)
+                db.session.commit()
+            session['username'] = username
+            return redirect(url_for('index'))
     return render_template('login.html')
 
 @app.route('/logout')
