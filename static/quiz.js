@@ -1,9 +1,9 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() { //loading webpage
     const quizContent = document.getElementById('quiz-content');
     const submitButton = document.getElementById('submit-quiz');
     let currentQuiz = [];
     
-    // Language content database
+    // Language content database 
     const languageContent = {
         'French': {
             script: 'Français',
@@ -153,13 +153,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     'nùeng (หนึ่ง)': 'one',
                     'sɔ̌ng (สอง)': 'two',
                     'sǎam (สาม)': 'three',
-                    'sìi': 'four',
-                    'hâa': 'five',
-                    'hòk': 'six',
-                    'cèt': 'seven',
-                    'pɛ̀et': 'eight',
-                    'kâao': 'nine',
-                    'sìp': 'ten'
+                    'sìi(สี่)': 'four',
+                    'hâa (ห้า)': 'five',
+                    'hòk (หก)': 'six',
+                    'cèt (เจ็ด)': 'seven',
+                    'pɛ̀et (แปด)': 'eight',
+                    'kâao (เก้า)': 'nine',
+                    'sìp (สิบ)': 'ten'
                 },
             },
             'Korean': {
@@ -215,8 +215,60 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             }
         };
+
+        async function getQuizQuestions(language) {
+            try {
+                // First try to get LLM-generated questions
+                const response = await fetch(`/get_quiz_questions/${language}`);
+                const data = await response.json();
+                
+                if (data && !data.error) {
+                    return data;
+                } else {
+                    // If LLM fails, fall back to local content
+                    console.log('Falling back to local content');
+                    return generateLocalQuiz(language);
+                }
+            } catch (error) {
+                console.error('Error fetching LLM questions:', error);
+                return generateLocalQuiz(language);
+            }
+        }
         
+        function generateLocalQuiz(language) {
+            const langContent = languageContent[language]; //handle error if language is not in langContent
+            if (!langContent) return null;
+            
+            const questions = [];
+            const vocabEntries = Object.entries(langContent.words); //store meaning of the words
+
+            const allMeanings = Object.values(langContent.words); // store meaning of all words
+
+            // Select 10 random words for the quiz
+            const selectedVocab = shuffleArray(vocabEntries).slice(0, 10);
+            
+            selectedVocab.forEach(([word, meaning]) => { //looping in selectedVocab
+                const options = shuffleArray([
+                    //use meaning to be a correct one and choose 3 incorrect answers that not "meaning"
+                    meaning,
+                    ...shuffleArray(allMeanings.filter(m => m !== meaning)).slice(0, 3)
+                ]);
+                
+                const correctIndex = options.indexOf(meaning); //find the correct answer
+                const correctLetter = String.fromCharCode(65 + correctIndex); //index to string
     
+                    // created object 'questions' and stores in questions
+                questions.push({
+                    question: `What does '${word}' mean in ${language}?`,
+                    options: options.map((opt, i) => `${String.fromCharCode(65 + i)}) ${opt}`),
+                    correct: correctLetter //the correct answer
+                });
+            });
+            
+            return questions;
+        }
+        
+        // randomly generate the sequence of the question
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -225,52 +277,25 @@ document.addEventListener('DOMContentLoaded', function() {
             return array;
         }
     
-        function generateQuiz(language) {
-            const langContent = languageContent[language];
-            if (!langContent) return null;
-            
-            const questions = [];
-            const vocabEntries = Object.entries(langContent.words);
-            const allMeanings = Object.values(langContent.words);
-            
-            // Select 10 random words for the quiz
-            const selectedVocab = shuffleArray(vocabEntries).slice(0, 10);
-            
-            selectedVocab.forEach(([word, meaning]) => {
-                const options = shuffleArray([
-                    meaning,
-                    ...shuffleArray(allMeanings.filter(m => m !== meaning)).slice(0, 3)
-                ]);
-                
-                const correctIndex = options.indexOf(meaning);
-                const correctLetter = String.fromCharCode(65 + correctIndex);
-    
-                questions.push({
-                    question: `What does '${word}' mean in ${language}?`,
-                    options: options.map((opt, i) => `${String.fromCharCode(65 + i)}) ${opt}`),
-                    correct: correctLetter
-                });
-            });
-            
-            return questions;
-        }
-    
         function displayQuiz(questions) {
             currentQuiz = questions;
-            quizContent.innerHTML = questions.map((q, i) => `
+            // delete the previous page to avoid the same display as before
+            quizContent.innerHTML = questions.map((q, i) => ` //.map makeHTML to loop for each Ques.
                 <div class="question">
-                    <p><strong>Question ${i + 1}:</strong> ${q.question}</p>
+                    <p><strong>Question ${i + 1}:</strong> ${q.question}</p>  //loop each by each question
                     <div class="options-container">
                         ${q.options.map(opt => `
                             <label class="option">
-                                <input type="radio" name="q${i}" value="${opt[0]}">
+                                <input type="radio" name="q${i}" value="${opt[0]}"> //radio = make sure to choose only one answer
                                 ${opt}
                             </label>
-                        `).join('')}
+                        `).join('')} //mix all q be in one html
                     </div>
                 </div>
             `).join('');
         }
+
+        // check the answer and store to input.value
     
         submitButton.addEventListener('click', async function() {
             const answers = Array.from(document.querySelectorAll('input[type="radio"]:checked'))
@@ -281,23 +306,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
     
-            const score = answers.reduce((acc, ans, i) => {
+            const score = answers.reduce((acc, ans, i) => { //reduce() will looping check how many the correct answer is
                 return acc + (ans === currentQuiz[i].correct ? 1 : 0);
             }, 0);
     
-            const percentage = (score / currentQuiz.length) * 100;
+            const percentage = (score / currentQuiz.length) * 100; 
     
             try {
-                const response = await fetch('/submit_score', {
+                const response = await fetch('/submit_score', { //submit the result by fetch
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        language: document.querySelector('h1').textContent.split(' ')[0],
+                    body: JSON.stringify({ //converts a JavaScript object into a JSON-formatted string
+                        language: document.querySelector('h1').textContent.split(' ')[0], //split the text and take the first word
                         score: percentage,
-                        answers: answers,
-                        correct_answers: currentQuiz.map(q => q.correct)
+                        answers: answers, //user's answer go to answer's array
+                        correct_answers: currentQuiz.map(q => q.correct) //extracts only the correct answers
                     })
                 });
     
@@ -311,8 +336,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
         // Initialize quiz
         const language = document.querySelector('h1').textContent.split(' ')[0];
-        const questions = generateQuiz(language);
-        if (questions) {
-            displayQuiz(questions);
-        }
+        getQuizQuestions(language).then(questions => { //load the data, then display it
+            if (questions) {
+                displayQuiz(questions);
+            }
+        });
     });

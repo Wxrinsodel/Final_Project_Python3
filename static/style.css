@@ -309,20 +309,23 @@ body {
 .language-stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    gap: 1rem;
     padding: 1rem;
 }
 
 .language-stats-card {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
     background: white;
     border-radius: 8px;
-    padding: 1.5rem;
+    padding: 5rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .language-stats-card h2 {
     color: var(--primary-color);
     margin-bottom: 1rem;
+    margin-top: 1rem;
     text-align: center;
 }
 
@@ -331,11 +334,26 @@ body {
     gap: 1rem;
 }
 
+
+.combined-stats {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: rgb(255, 255, 255);
+    position: relative;
+    height: 10cm;
+    width: auto;
+}
+
 .chart-container {
     position: relative;
-    height: 200px;
+    height: 400px;  /* Makes the chart container taller */
     width: 100%;
+    margin: 20px 0;
 }
+
 
 .stats-summary {
     display: grid;
