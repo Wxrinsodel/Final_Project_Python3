@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+]<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,29 +7,111 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="login-background">  <div class="login-container">
+    <div class="login-background">
+        <div class="login-container">
             <h1>Login to Language Quiz</h1>
-            <form method="POST" action="{{ url_for('login') }}">
+            <form method="POST" action="{{ url_for('login') }}" id="login-form">
                 <div class="form-group">
                     <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required>
+                    <div class="username-suggestions">
+                        <input type="text" id="username" name="username" required autocomplete="off">
+                        <div id="suggestions-list" class="suggestions-list"></div>
+                    </div>
                 </div>
                 <button type="submit">Login</button>
             </form>
         </div>
     </div>
+
     <script>
-        // Get the username input field
-        const usernameInput = document.getElementById('username');
-        
-        // Load saved username if it exists
-        if (localStorage.getItem('savedUsername')) {
-            usernameInput.value = localStorage.getItem('savedUsername');
-        }
-        
-        // Save username when form is submitted
-        document.querySelector('form').addEventListener('submit', function() {
-            localStorage.setItem('savedUsername', usernameInput.value);
+        // Username history management
+        const usernameHistory = {
+            getHistory: () => {
+                const history = localStorage.getItem('usernameHistory');
+                return history ? JSON.parse(history) : [];
+            },
+            
+            addUsername: (username) => {
+                let history = usernameHistory.getHistory();
+                // Remove username if it exists to avoid duplicates
+                history = history.filter(name => name !== username);
+                // Add new username at the beginning
+                history.unshift(username);
+                // Keep only the last 5 usernames
+                history = history.slice(0, 5);
+                localStorage.setItem('usernameHistory', JSON.stringify(history));
+            },
+            
+            showSuggestions: (input) => {
+                const history = usernameHistory.getHistory();
+                const suggestionsList = document.getElementById('suggestions-list');
+                
+                if (!history.length) {
+                    suggestionsList.style.display = 'none';
+                    return;
+                }
+                
+                const inputValue = input.value.toLowerCase();
+                const filteredHistory = history.filter(name => 
+                    name.toLowerCase().includes(inputValue)
+                );
+                
+                if (!filteredHistory.length) {
+                    suggestionsList.style.display = 'none';
+                    return;
+                }
+                
+                suggestionsList.innerHTML = filteredHistory
+                    .map(name => `
+                        <div class="suggestion-item" onclick="usernameHistory.selectUsername('${name}')">
+                            ${name}
+                        </div>
+                    `).join('');
+                    
+                suggestionsList.style.display = 'block';
+            },
+            
+            selectUsername: (username) => {
+                document.getElementById('username').value = username;
+                document.getElementById('suggestions-list').style.display = 'none';
+            }
+        };
+
+        // Set up event listeners when document is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const usernameInput = document.getElementById('username');
+            const loginForm = document.getElementById('login-form');
+            
+            // Show suggestions when typing
+            usernameInput.addEventListener('input', (e) => {
+                usernameHistory.showSuggestions(e.target);
+            });
+            
+            // Show suggestions when focusing on input
+            usernameInput.addEventListener('focus', () => {
+                usernameHistory.showSuggestions(usernameInput);
+            });
+            
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.username-suggestions')) {
+                    document.getElementById('suggestions-list').style.display = 'none';
+                }
+            });
+            
+            // Save username when form is submitted
+            loginForm.addEventListener('submit', (e) => {
+                const username = usernameInput.value.trim();
+                if (username) {
+                    usernameHistory.addUsername(username);
+                }
+            });
+
+            // Load most recent username if it exists
+            const history = usernameHistory.getHistory();
+            if (history.length > 0) {
+                usernameInput.value = history[0];
+            }
         });
     </script>
 </body>

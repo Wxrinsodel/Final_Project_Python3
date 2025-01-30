@@ -16,26 +16,12 @@
 
     <div class="quiz-container">
         <h1>{{ language }} Language Quiz</h1>
-        <div class="difficulty-selector">
-            <label for="difficulty">Difficulty:</label>
-            <select id="difficulty" onchange="changeDifficulty()">
-                <option value="beginner" {% if difficulty == 'beginner' %}selected{% endif %}>Beginner</option>
-                <option value="intermediate" {% if difficulty == 'intermediate' %}selected{% endif %}>Intermediate</option>
-                <option value="advanced" {% if difficulty == 'advanced' %}selected{% endif %}>Advanced</option>
-            </select>
-        </div>
         <div id="quiz-content" class="quiz-questions">
-            {{ quiz }}
+            <!-- Quiz questions will be dynamically inserted here by JavaScript -->
         </div>
         <button id="submit-quiz" class="submit-btn">Submit Quiz</button>
     </div>
 
-    <script>
-        function changeDifficulty() {
-            const difficulty = document.getElementById('difficulty').value;
-            window.location.href = `${window.location.pathname}?difficulty=${difficulty}`;
-        }
-    </script>
     <script src="{{ url_for('static', filename='quiz.js') }}"></script>
 </body>
 </html>
