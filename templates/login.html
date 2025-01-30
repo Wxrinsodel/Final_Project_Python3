@@ -24,10 +24,11 @@
     </div>
 
     <script>
+
         // Username history management
         const usernameHistory = {
             getHistory: () => {
-                const history = localStorage.getItem('usernameHistory');
+                const history = localStorage.getItem('usernameHistory'); //check if there's a stored history of usernames.
                 return history ? JSON.parse(history) : [];
             },
             

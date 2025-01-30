@@ -16,54 +16,121 @@
 
     <div class="progress-container">
         <h1 class="text-center mb-8">Your Learning Progress</h1>
-        
-        <div class="language-stats-grid">
-            {% for language, data in languages.items() %}
-            <div class="language-stats-card">
-                <h2>{{ language }}</h2>
-                <div class="stats-grid">
-                    <div class="chart-container">
-                        <canvas id="scoreChart{{ loop.index }}"></canvas>
-                    </div>
-                    <div class="stats-summary">
-                        <p>Total Attempts: {{ data.attempts }}</p>
-                        <p>Average Score: {{ "%.1f"|format(data.average_score) }}%</p>
-                        <p>Highest Score: {{ "%.1f"|format(data.highest_score) }}%</p>
-                        <p>Latest Score: {{ "%.1f"|format(data.latest_score) }}%</p>
-                    </div>
+        <div class="combined-stats">
+            <div class="chart-container">
+                <h2>Your Highest Scores Across Languages</h2>
+                <canvas id="combinedScoresChart"></canvas>
+            </div>
+        </div>
+
+        {% for language, data in languages.items() %}  <div class="language-stats-card">
+            <h2>{{ language }}</h2>
+            <div class="stats-grid">
+
+                <div class="chart-container">
+                    <canvas id="distributionChart{{ loop.index }}"></canvas>
+                </div>
+                <div class="stats-summary">
+                    <p>Total Attempts: {{ data.attempts }}</p>
+                    <p>Average Score: {{ "%.1f"|format(data.average_score) }}%</p>
+                    <p>Highest Score: {{ "%.1f"|format(data.highest_score) }}%</p>
+                    <p>Latest Score: {{ "%.1f"|format(data.latest_score) }}%</p>
                 </div>
             </div>
-            
-            <script>
-                const ctx{{ loop.index }} = document.getElementById(`scoreChart{{ loop.index }}`).getContext('2d');
-                new Chart(ctx{{ loop.index }}, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Highest Score', 'Latest Score'],
-                        datasets: [{
-                            label: 'Score Comparison',
-                            data: [{{ data.highest_score }}, {{ data.latest_score }}],
-                            backgroundColor: [
-                                'rgba(75, 192, 192, 0.6)',
-                                'rgba(153, 102, 255, 0.6)'
-                            ],
-                            borderColor: [
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 100
+        </div>
+        {% endfor %} </div>
+
+    <script>
+        
+        const combinedCtx = document.getElementById('combinedScoresChart').getContext('2d');
+        new Chart(combinedCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ all_languages_data|map(attribute='language')|list|tojson }}, // Set the labels to the list of languages
+                datasets: [{
+                    label: 'Highest Scores',
+                    data: {{ all_languages_data|map(attribute='highest_score')|list|tojson }},
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true, // Start the Y axis from 0
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Score (%)',
+                            font: {
+                                size: 14
                             }
                         }
                     }
-                });
-            </script>
-            {% endfor %}
-        </div>
-    </div>
+                }
+            }
+        });
+
+        // Add distribution chart for each language
+        {% for language, data in languages.items() %}
+
+        // Initialize context for each language's score distribution chart
+        const distCtx{{ loop.index }} = document.getElementById(`distributionChart{{ loop.index }}`).getContext('2d');
+        new Chart(distCtx{{ loop.index }}, {
+            type: 'bar',
+            data: {
+                labels: Object.keys({{ data.distribution|tojson }}),
+                datasets: [{
+                    label: 'Number of Users',
+                    data: Object.values({{ data.distribution|tojson }}),
+                    backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true, // can resizing 
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Users',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Score Range (%)',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Score Distribution',
+                        font: {
+                            size: 17,
+                            weight: ''
+                        },
+                        padding: 20
+                    },
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                }
+            }
+        });
+        {% endfor %}
+    </script>
+</body>
+</html>
