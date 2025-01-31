@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() { //loading webpage
             
             selectedVocab.forEach(([word, meaning]) => { //looping in selectedVocab
                 const options = shuffleArray([
-                    //use meaning to be a correct one and choose 3 incorrect answers that not "meaning"
+                    //use meaning for a correct one and choose 3 incorrect answers that not "meaning"
                     meaning,
                     ...shuffleArray(allMeanings.filter(m => m !== meaning)).slice(0, 3)
                 ]);
@@ -280,16 +280,16 @@ document.addEventListener('DOMContentLoaded', function() { //loading webpage
         function displayQuiz(questions) {
             currentQuiz = questions;
             // delete the previous page to avoid the same display as before
-            quizContent.innerHTML = questions.map((q, i) => ` //.map makeHTML to loop for each Ques.
+            quizContent.innerHTML = questions.map((q, i) => `
                 <div class="question">
-                    <p><strong>Question ${i + 1}:</strong> ${q.question}</p>  //loop each by each question
+                    <p><strong>Question ${i + 1}:</strong> ${q.question}</p> 
                     <div class="options-container">
                         ${q.options.map(opt => `
                             <label class="option">
-                                <input type="radio" name="q${i}" value="${opt[0]}"> //radio = make sure to choose only one answer
+                                <input type="radio" name="q${i}" value="${opt[0]}"> 
                                 ${opt}
                             </label>
-                        `).join('')} //mix all q be in one html
+                        `).join('')}
                     </div>
                 </div>
             `).join('');
@@ -310,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() { //loading webpage
                 return acc + (ans === currentQuiz[i].correct ? 1 : 0);
             }, 0);
     
-            const percentage = (score / currentQuiz.length) * 100; 
+            const percentage = (score / currentQuiz.length) * 100;  //modify score to percentage
     
             try {
                 const response = await fetch('/submit_score', { //submit the result by fetch
