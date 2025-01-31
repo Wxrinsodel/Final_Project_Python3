@@ -42,6 +42,7 @@
 
     <script>
         
+        //Initialize context for Highest scores for user
         const combinedCtx = document.getElementById('combinedScoresChart').getContext('2d');
         new Chart(combinedCtx, {
             type: 'bar',
@@ -77,6 +78,7 @@
 
         // Initialize context for each language's score distribution chart
         const distCtx{{ loop.index }} = document.getElementById(`distributionChart{{ loop.index }}`).getContext('2d');
+        // loop.index = suggests that multiple canvas contexts are being created
         new Chart(distCtx{{ loop.index }}, {
             type: 'bar',
             data: {
