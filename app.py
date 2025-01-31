@@ -7,8 +7,9 @@ from flask_migrate import Migrate
 import dotenv
 import os
 from mistralai import Mistral
-dotenv.load_dotenv()
 
+
+dotenv.load_dotenv()
 
 api_key = os.environ["Mistral"]
 model = "mistral-large-latest"
@@ -26,7 +27,7 @@ migrate = Migrate(app, db)
 
 def generate_quiz_with_llm(language, num_questions=10):
     """
-    Generates language quiz questions using OpenAI's API
+    Generates language quiz questions using Mistral's API
     """
     prompt = f"""Generate {num_questions} multiple choice questions for {language} language learning.
     Each question should test vocabulary or basic grammar.
@@ -52,7 +53,7 @@ def generate_quiz_with_llm(language, num_questions=10):
             ]
         )
         
-        # json to python object >> Use in Flask andEnsure correct format before using it
+        # json to python object >> Use in Flask and Ensure correct format before using it
         response = response.choices[0].message.content
         response = response.replace("```json", '')
         response = response.replace("```", '')
@@ -85,7 +86,7 @@ class Score(db.Model):
 @app.route('/quiz/<language>')
 def quiz(language):
     if 'username' not in session:
-        return redirect(url_for('login')) #back to loginpage
+        return redirect(url_for('login')) #back to login page
     
     # Generate questions using LLM
     questions = generate_quiz_with_llm(language)
@@ -199,7 +200,7 @@ def calculate_score_distribution(scores, bins=10):
     score_values = [s.score for s in scores]
     hist = {}
     
-    # Create bins from 0 to 100
+    # Create bins from 0 to 100 
     bin_size = 100 / bins # With default 10 bins, each bin is 10 points wide
     for i in range(bins):
         lower = i * bin_size
@@ -211,7 +212,7 @@ def calculate_score_distribution(scores, bins=10):
         # Add to histogram with formatted range as key >> .0f is decimal thing
         hist[f"{lower:.0f}-{upper:.0f}"] = count
     
-    return hist
+    return hist # where the bin range is the key.
 
 
 @app.route('/')
@@ -263,4 +264,4 @@ def language_page(lang):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(debug=True, host='127.0.0.1', port=1234)
+    app.run(debug=True, host='0.0.0.0', port=1234)
